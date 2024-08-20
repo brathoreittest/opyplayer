@@ -19,15 +19,26 @@
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+<<<<<<< HEAD
         var player;
         var videoList = []; // Array to store video IDs
         var files = [
+=======
+            var player;
+            var videoList = []; // Array to store video IDs
+            var files = [
+>>>>>>> 61e1dd2b1c4048bba0f6c6bf14df46e0fc4aeb28
                 { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/terraform.txt', name: 'terraform.txt' },
                 { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/movies.txt', name: 'movies.txt' },
                 { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/hindivideos.txt', name: 'hindivideos.txt' },
                 { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/englishvideos.txt', name: 'englishvideos.txt' }
+<<<<<<< HEAD
         ]; // Array of files
         var currentFileIndex = 0; // Track the current file
+=======
+            ]; // Array of files
+            var currentFileIndex = 0; // Track the current file
+>>>>>>> 61e1dd2b1c4048bba0f6c6bf14df46e0fc4aeb28
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
