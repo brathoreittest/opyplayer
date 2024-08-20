@@ -1,112 +1,123 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <title>YouTube Player</title>
-    </head>
-    <body>
-        <!-- The YouTube player will replace this <div> tag. -->
-        <div id="player"></div>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>YouTube Player</title>
+</head>
+<body>
+    <!-- The YouTube player will replace this <div> tag. -->
+    <div id="player"></div>
 
-        <!-- Buttons -->
-        <button id="nextButton" type="button">Next</button>
-        <button id="fileButton" type="button">File</button>
+    <!-- Buttons -->
+    <button id="nextButton" type="button">Next</button>
+    <button id="fileButton" type="button">File</button>
 
-        <script>
-            // Load YouTube IFrame Player API asynchronously
-            var tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    <script>
+        // Load YouTube IFrame Player API asynchronously
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-            var player;
-            var videoList = []; // Array to store video IDs
-            var files = [
-                { url: 'https://raw.githubusercontent.com/brathoreittest/opyplayer/main/terraform.txt', name: 'terraform.txt' },
-                { url: 'https://raw.githubusercontent.com/brathoreittest/opyplayer/main/movies.txt', name: 'movies.txt' }
-            ]; // Array of files
-            var currentFileIndex = 0; // Track the current file
+        var player;
+        var videoList = []; // Array to store video IDs
+        var files = [
+                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/terraform.txt', name: 'terraform.txt' },
+                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/movies.txt', name: 'movies.txt' },
+                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/hindivideos.txt', name: 'hindivideos.txt' },
+                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/englishvideos.txt', name: 'englishvideos.txt' }
+        ]; // Array of files
+        var currentFileIndex = 0; // Track the current file
 
-            function onYouTubeIframeAPIReady() {
-                player = new YT.Player('player', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: 'M7lc1UVf-VE',  // Initial video ID
-                    playerVars: {
-                        'playsinline': 1
-                    },
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange,
-                        'onError': onPlayerError // Listen for errors
-                    }
-                });
-            }
-
-            // When the player is ready, automatically play the video
-            function onPlayerReady(event) {
-                event.target.playVideo();
-            }
-
-            // Fetch video IDs from a file
-            function fetchVideoList(file) {
-                fetch(file.url)
-                    .then(response => response.text())
-                    .then(data => {
-                        videoList = data.split('\n').filter(id => id.trim() !== '');
-                        var displayName = file.name.replace('.txt', '');
-                        displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1); // Capitalize the first letter
-                        document.getElementById('fileButton').innerText = displayName;  // Update button text
-                    })
-                    .catch(error => console.error('Error fetching video list:', error));
-            }
-
-            // Play a random video from the video list
-            function playRandomVideo() {
-                if (videoList.length > 0) {
-                    var randomIndex = Math.floor(Math.random() * videoList.length);
-                    var randomVideoId = videoList[randomIndex];
-                    player.loadVideoById(randomVideoId);  // Load and play random video
-                } else {
-                    console.error("Video list is empty or not loaded.");
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'oQWTh2Rm2b0',  // Initial video ID
+                playerVars: {
+                    'playsinline': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError // Listen for errors
                 }
-            }
-
-            // Handle player errors
-            function onPlayerError(event) {
-                if (event.data == 101 || event.data == 150) { // Errors related to video playback restrictions
-                    console.error("Playback disabled by video owner, playing next video...");
-                    playRandomVideo(); // Play next random video from the current file
-                }
-            }
-
-            // Event listeners for buttons
-            document.getElementById('nextButton').addEventListener('click', playRandomVideo);
-
-            document.getElementById('fileButton').addEventListener('click', function() {
-                // Move to the next file, or cycle back to the first file
-                currentFileIndex = (currentFileIndex + 1) % files.length;
-                fetchVideoList(files[currentFileIndex]);
-                playRandomVideo();  // Play random video from the newly fetched list
             });
+        }
 
-            // Fetch the default video list on page load
-            window.onload = function() {
-                fetchVideoList(files[0]); // Load the first file by default
-            };
+        // When the player is ready, automatically play the video
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
 
-            // Player state change handling
-            var done = false;
-            function onPlayerStateChange(event) {
-                if (event.data == YT.PlayerState.PLAYING && !done) {
-                    setTimeout(stopVideo, 6000);
-                    done = true;
-                }
+        // Fetch video IDs from a file
+        function fetchVideoList(file) {
+            fetch(file.url)
+                .then(response => response.text())
+                .then(data => {
+                    videoList = data.split('\n').filter(id => id.trim() !== '');
+                    var displayName = file.name.replace('.txt', '');
+                    displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1); // Capitalize the first letter
+                    document.getElementById('fileButton').innerText = displayName;  // Update button text
+                })
+                .catch(error => console.error('Error fetching video list:', error));
+        }
+
+        // Play a random video from the video list
+        function playRandomVideo() {
+            if (videoList.length > 0) {
+                var randomIndex = Math.floor(Math.random() * videoList.length);
+                var randomVideoId = videoList[randomIndex];
+                player.loadVideoById(randomVideoId);  // Load and play random video
+
+                // Wait for the video to load, then seek to a random time
+                player.addEventListener('onReady', function() {
+                    setTimeout(() => {
+                        var duration = player.getDuration();
+                        var randomTime = Math.floor(Math.random() * duration);
+                        player.seekTo(randomTime, true); // Seek to a random time
+                    }, 1000); // Delay to ensure the video metadata is loaded
+                });
+            } else {
+                console.error("Video list is empty or not loaded.");
             }
+        }
 
-            function stopVideo() {
-                player.stopVideo();
+        // Handle player errors
+        function onPlayerError(event) {
+            if (event.data == 101 || event.data == 150) { // Errors related to video playback restrictions
+                console.error("Playback disabled by video owner, playing next video...");
+                playRandomVideo(); // Play next random video from the current file
             }
-        </script>
-    </body>
+        }
+
+        // Event listeners for buttons
+        document.getElementById('nextButton').addEventListener('click', playRandomVideo);
+
+        document.getElementById('fileButton').addEventListener('click', function() {
+            // Move to the next file, or cycle back to the first file
+            currentFileIndex = (currentFileIndex + 1) % files.length;
+            fetchVideoList(files[currentFileIndex]);
+            playRandomVideo();  // Play random video from the newly fetched list
+        });
+
+        // Fetch the default video list on page load
+        window.onload = function() {
+            fetchVideoList(files[0]); // Load the first file by default
+        };
+
+        // Player state change handling
+        var done = false;
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING && !done) {
+                setTimeout(stopVideo, 6000);
+                done = true;
+            }
+        }
+
+        function stopVideo() {
+            player.stopVideo();
+        }
+    </script>
+</body>
 </html>
