@@ -13,7 +13,11 @@ width: 100%;
     position: absolute;
     font-size: 20px;
     padding: 10px 50px;
-    background: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1;
     color: white;
 }
 #fileButton {
@@ -22,6 +26,11 @@ width: 100%;
     position: absolute;
     font-size: 20px;
     padding: 10px 60px;
-    background: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1;
     color: white;
+
 }

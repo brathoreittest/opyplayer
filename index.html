@@ -19,26 +19,15 @@
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-<<<<<<< HEAD
         var player;
         var videoList = []; // Array to store video IDs
         var files = [
-=======
-            var player;
-            var videoList = []; // Array to store video IDs
-            var files = [
->>>>>>> 61e1dd2b1c4048bba0f6c6bf14df46e0fc4aeb28
-                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/terraform.txt', name: 'terraform.txt' },
-                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/movies.txt', name: 'movies.txt' },
-                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/hindivideos.txt', name: 'hindivideos.txt' },
-                { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/englishvideos.txt', name: 'englishvideos.txt' }
-<<<<<<< HEAD
+            { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/terraform.txt', name: 'terraform.txt' },
+            { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/movies.txt', name: 'movies.txt' },
+            { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/hindivideos.txt', name: 'hindivideos.txt' },
+            { url: 'https://raw.githubusercontent.com/brathoreittest/test/main/englishvideos.txt', name: 'englishvideos.txt' }
         ]; // Array of files
         var currentFileIndex = 0; // Track the current file
-=======
-            ]; // Array of files
-            var currentFileIndex = 0; // Track the current file
->>>>>>> 61e1dd2b1c4048bba0f6c6bf14df46e0fc4aeb28
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
@@ -58,7 +47,7 @@
 
         // When the player is ready, automatically play the video
         function onPlayerReady(event) {
-            event.target.playVideo();
+            // No action needed here for now
         }
 
         // Fetch video IDs from a file
@@ -79,19 +68,22 @@
             if (videoList.length > 0) {
                 var randomIndex = Math.floor(Math.random() * videoList.length);
                 var randomVideoId = videoList[randomIndex];
-                player.loadVideoById(randomVideoId);  // Load and play random video
 
-                // Wait for the video to load, then seek to a random time
-                player.addEventListener('onReady', function() {
-                    setTimeout(() => {
-                        var duration = player.getDuration();
-                        var randomTime = Math.floor(Math.random() * duration);
-                        player.seekTo(randomTime, true); // Seek to a random time
-                    }, 1000); // Delay to ensure the video metadata is loaded
+                // Load the video with a random start time
+                player.loadVideoById({
+                    videoId: randomVideoId,
+                    startSeconds: getRandomStartTime()
                 });
             } else {
                 console.error("Video list is empty or not loaded.");
             }
+        }
+
+        // Get a random start time based on video duration
+        function getRandomStartTime() {
+            var duration = player.getDuration();
+            var randomTime = Math.floor(Math.random() * duration);
+            return randomTime;
         }
 
         // Handle player errors
@@ -109,7 +101,6 @@
             // Move to the next file, or cycle back to the first file
             currentFileIndex = (currentFileIndex + 1) % files.length;
             fetchVideoList(files[currentFileIndex]);
-            playRandomVideo();  // Play random video from the newly fetched list
         });
 
         // Fetch the default video list on page load
@@ -118,16 +109,10 @@
         };
 
         // Player state change handling
-        var done = false;
         function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING && !done) {
-                setTimeout(stopVideo, 6000);
-                done = true;
+            if (event.data == YT.PlayerState.ENDED) {
+                playRandomVideo(); // Play another random video from the current file
             }
-        }
-
-        function stopVideo() {
-            player.stopVideo();
         }
     </script>
 </body>
